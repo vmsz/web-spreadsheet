@@ -1,32 +1,27 @@
 const page = document.body.classList
+const storedTheme = localStorage.getItem('theme')
 
 const applyUserPreferredTheme = () => {
-  const themeOnStorage = localStorage.getItem('theme')
-  if (themeOnStorage) {
-    return changeTheme(themeOnStorage)
+  if (storedTheme) {
+    return page.add(storedTheme)
   }
   if (window.matchMedia) {
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return changeTheme('light')
+      return page.add('light-theme')
     }
   }
-  return changeTheme('dark')
+  return page.add('dark-theme')
 }
 
-const changeTheme = themeName => {
-  page.remove('light-theme', 'dark-theme')
-  return page.add(`${themeName}-theme`)
-}
-
-const storeTheme = themeName => {
-  return localStorage.setItem('theme', themeName)
-}
-
-const getActualTheme = () => {
+const switchTheme = () => {
   if (page.contains('light-theme')) {
-    return 'light'
+    page.remove('light-theme')
+    localStorage.setItem('theme', 'dark-theme')
+    return page.add('dark-theme')
   }
-  return 'dark'
+  page.remove('dark-theme')
+  localStorage.setItem('theme', 'light-theme')
+  return page.add('light-theme')
 }
 
-export { applyUserPreferredTheme, changeTheme, storeTheme, getActualTheme }
+export { applyUserPreferredTheme, switchTheme }

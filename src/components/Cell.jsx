@@ -1,43 +1,16 @@
-import {
-  selectCell,
-  deselectCell,
-  deleteCellContent,
-  deleteCharacter,
-  moveLeft,
-  moveUp,
-  moveRight,
-  moveDown,
-} from '../hooks/useCell'
+import { useCell } from '../hooks/useCell'
 
 const Cell = props => {
   return (
     <input
       onKeyDown={event => {
-        const cellMode = event.target.readOnly
-        const keyPressed = event.key
-        const shiftPressed = event.shiftKey
-
-        if (shiftPressed && keyPressed == 'Tab') return moveLeft(event)
-        if (shiftPressed && keyPressed == 'Enter') return moveUp(event)
-        if (keyPressed == 'Tab') return moveRight(event)
-        if (keyPressed == 'Enter') return moveDown(event)
-
-        if (cellMode) {
-          if (keyPressed == 'ArrowLeft') return moveLeft(event)
-          if (keyPressed == 'ArrowUp') return moveUp(event)
-          if (keyPressed == 'ArrowRight') return moveRight(event)
-          if (keyPressed == 'ArrowDown') return moveDown(event)
-          if (keyPressed == 'Delete') return deleteCellContent(event)
-        }
-        if (!cellMode) {
-          if (keyPressed == 'Delete') return deleteCharacter(event)
-        }
+        return new useCell(event).handleKeyDown()
       }}
       onDoubleClick={event => {
-        selectCell(event)
+        return new useCell(event).selectCell()
       }}
       onBlur={event => {
-        deselectCell(event)
+        return new useCell(event).deselectCell()
       }}
       type='text'
       id={props.id}
